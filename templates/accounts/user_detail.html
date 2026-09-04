@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile_user.display_name }} - GameForge{% endblock %}
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="gf-card text-center p-4">
+      <div class="rounded-circle bg-primary bg-opacity-25 text-primary fw-bold d-inline-flex align-items-center justify-content-center fs-1 mb-3" style="width: 90px; height: 90px;">
+        {{ profile_user.username|slice:":1"|upper }}
+      </div>
+      <h4 class="text-white fw-bold mb-1">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
+      <p class="text-secondary small mb-2">@{{ profile_user.username }}</p>
+      <div class="badge gf-badge-purple mb-3">{{ profile_user.get_role_display }}</div>
+      <p class="text-muted small">{{ profile_user.bio|default:"No bio provided." }}</p>
+      <div class="border-top border-secondary border-opacity-25 pt-3 mt-3 text-start small">
+        <div class="mb-2"><i class="bi bi-envelope me-2 text-secondary"></i> {{ profile_user.email }}</div>
+        <div class="mb-2"><i class="bi bi-briefcase me-2 text-secondary"></i> {{ profile_user.job_title }}</div>
+        <div class="mb-2"><i class="bi bi-building me-2 text-secondary"></i> {{ profile_user.department|default:"Engineering" }}</div>
+        <div class="mb-2"><i class="bi bi-github me-2 text-secondary"></i> {{ profile_user.github_handle|default:"-" }}</div>
+        <div><i class="bi bi-discord me-2 text-secondary"></i> {{ profile_user.discord_tag|default:"-" }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="gf-card mb-4">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white">Assigned Tasks</h5>
+      </div>
+      <div class="gf-card-body p-0">
+        <table class="gf-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Project</th>
+              <th>Status</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in profile_user.assigned_tasks.all|slice:":6" %}
+            <tr>
+              <td><a href="{% url 'tasks:detail' task.pk %}" class="text-white text-decoration-none">{{ task.title }}</a></td>
+              <td>{{ task.project.title }}</td>
+              <td><span class="badge bg-secondary">{{ task.get_status_display }}</span></td>
+              <td><span class="badge gf-badge-warning">{{ task.get_priority_display }}</span></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center py-3 text-muted">No assigned tasks.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Studio Settings - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white"><i class="bi bi-sliders me-2 text-primary"></i> Notification & UI Preferences</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="form-label">Preferred Workspace Theme</label>
+            {{ form.theme }}
+          </div>
+
+          <h5 class="fw-bold text-white mb-3 pt-3 border-top border-secondary border-opacity-25">Alert Subscriptions</h5>
+          
+          <div class="form-check form-switch mb-3">
+            {{ form.email_notifications }}
+            <label class="form-check-label text-white ms-2">Receive Email Digest Notifications</label>
+          </div>
+
+          <div class="form-check form-switch mb-3">
+            {{ form.task_assignment_alerts }}
+            <label class="form-check-label text-white ms-2">Task Assignment & Mention Alerts</label>
+          </div>
+
+          <div class="form-check form-switch mb-3">
+            {{ form.bug_alerts }}
+            <label class="form-check-label text-white ms-2">Critical Bug Filing Alerts</label>
+          </div>
+
+          <div class="form-check form-switch mb-3">
+            {{ form.build_failure_alerts }}
+            <label class="form-check-label text-white ms-2">Build Pipeline Failure Notifications</label>
+          </div>
+
+          <div class="form-check form-switch mb-4">
+            {{ form.compact_view }}
+            <label class="form-check-label text-white ms-2">Enable Compact Dense Tables View</label>
+          </div>
+
+          <button type="submit" class="gf-btn gf-btn-primary">
+            <i class="bi bi-check-circle"></i> Save Preferences
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

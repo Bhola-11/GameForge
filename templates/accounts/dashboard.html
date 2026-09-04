@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Studio Command Center - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Studio Command Center</h2>
+    <p class="text-secondary mb-0">Live operations, active pipelines, telemetry & project telemetry.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'projects:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-plus-lg"></i> New Project</a>
+    <a href="{% url 'bugs:create' %}" class="gf-btn gf-btn-secondary"><i class="bi bi-bug"></i> Report Bug</a>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon blue"><i class="bi bi-joystick"></i></div>
+      <div>
+        <div class="kpi-value">{{ total_games }}</div>
+        <div class="kpi-label">Active Games</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon purple"><i class="bi bi-kanban"></i></div>
+      <div>
+        <div class="kpi-value">{{ active_projects }}</div>
+        <div class="kpi-label">Live Projects</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon red"><i class="bi bi-bug-fill"></i></div>
+      <div>
+        <div class="kpi-value">{{ open_bugs }}</div>
+        <div class="kpi-label">Open Defects</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon amber"><i class="bi bi-check2-circle"></i></div>
+      <div>
+        <div class="kpi-value">{{ pending_tasks }}</div>
+        <div class="kpi-label">Tasks Pending</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon cyan"><i class="bi bi-rocket-takeoff-fill"></i></div>
+      <div>
+        <div class="kpi-value">{{ upcoming_releases }}</div>
+        <div class="kpi-label">Releases In Flight</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon green"><i class="bi bi-people-fill"></i></div>
+      <div>
+        <div class="kpi-value">{{ total_players|intcomma }}</div>
+        <div class="kpi-label">Registered Players</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon green"><i class="bi bi-currency-dollar"></i></div>
+      <div>
+        <div class="kpi-value">${{ total_revenue|floatformat:0|intcomma }}</div>
+        <div class="kpi-label">Gross Revenue</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon purple"><i class="bi bi-headset"></i></div>
+      <div>
+        <div class="kpi-value">{{ support_tickets }}</div>
+        <div class="kpi-label">Active Tickets</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Visual Charts Row -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="gf-card h-100">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-activity me-2 text-primary"></i> Studio Velocity & Defect Resolution</h5>
+        <span class="badge gf-badge-primary">Last 30 Days</span>
+      </div>
+      <div class="gf-card-body">
+        <canvas id="velocityChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="gf-card h-100">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-pie-chart-fill me-2 text-warning"></i> Bugs by Severity</h5>
+      </div>
+      <div class="gf-card-body d-flex flex-column align-items-center justify-content-center">
+        <canvas id="bugDistChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Workload & Activities Row -->
+<div class="row g-4">
+  <!-- My Assigned Tasks -->
+  <div class="col-lg-6">
+    <div class="gf-card h-100">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-list-task me-2 text-info"></i> My Priority Tasks</h5>
+        <a href="{% url 'tasks:board' %}" class="btn btn-sm btn-outline-primary">Open Board</a>
+      </div>
+      <div class="gf-card-body p-0">
+        <table class="gf-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Due</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in my_tasks %}
+            <tr>
+              <td>
+                <a href="{% url 'tasks:detail' task.pk %}" class="text-white text-decoration-none fw-semibold">{{ task.title|truncatechars:35 }}</a>
+                <div class="small text-muted">{{ task.project.title }}</div>
+              </td>
+              <td>
+                <span class="gf-badge {% if task.priority == 'CRITICAL' %}gf-badge-danger{% elif task.priority == 'HIGH' %}gf-badge-warning{% else %}gf-badge-neutral{% endif %}">
+                  {{ task.get_priority_display }}
+                </span>
+              </td>
+              <td><span class="badge bg-secondary">{{ task.get_status_display }}</span></td>
+              <td class="text-secondary small">{{ task.due_date|default:"-" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted py-4">No tasks assigned to you right now. Great job!</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Stream -->
+  <div class="col-lg-6">
+    <div class="gf-card h-100">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-broadcast me-2 text-danger"></i> Studio Audit Feed</h5>
+        <a href="{% url 'audit:list' %}" class="btn btn-sm btn-outline-secondary">View All</a>
+      </div>
+      <div class="gf-card-body p-0">
+        <div class="p-3">
+          {% for act in recent_activities %}
+          <div class="d-flex align-items-start gap-3 py-2 border-bottom border-secondary border-opacity-10">
+            <div class="rounded-circle bg-primary bg-opacity-20 text-primary d-flex align-items-center justify-content-center p-2" style="width: 32px; height: 32px;">
+              <i class="bi bi-clock-history fs-6"></i>
+            </div>
+            <div class="flex-1">
+              <div class="small text-white">
+                <strong>{{ act.user.username|default:"System" }}</strong>: {{ act.description }}
+              </div>
+              <div class="text-muted" style="font-size: 0.72rem;">{{ act.timestamp|timesince }} ago &bull; Module: {{ act.module }}</div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="text-center text-muted py-4">No recent activity recorded.</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('velocityChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                datasets: [
+                    {
+                        label: 'Tasks Completed',
+                        data: [14, 22, 19, 31, 28],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'Bugs Resolved',
+                        data: [8, 15, 12, 24, 18],
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94A3B8' } } },
+                scales: {
+                    x: { ticks: { color: '#94A3B8' }, grid: { color: '#222F46' } },
+                    y: { ticks: { color: '#94A3B8' }, grid: { color: '#222F46' } }
+                }
+            }
+        });
+    }
+
+    const bugCtx = document.getElementById('bugDistChart');
+    if (bugCtx) {
+        new Chart(bugCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Blocker', 'Critical', 'Major', 'Minor', 'Trivial'],
+                datasets: [{
+                    data: [3, 8, 14, 22, 9],
+                    backgroundColor: ['#EF4444', '#F97316', '#F59E0B', '#3B82F6', '#64748B']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', boxWidth: 12 } } }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
