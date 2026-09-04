@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}Player Registry - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Player Profiles & Community Telemetry</h2>
+    <p class="text-secondary mb-0">Player accounts, XP levels, total playtime, moderation bans, and virtual wallet balances.</p>
+  </div>
+  <a href="{% url 'players:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-person-plus"></i> Register Player</a>
+</div>
+
+<div class="gf-card mb-4">
+  <div class="gf-card-body p-3">
+    <form method="get" class="d-flex gap-2 flex-wrap">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search username, email..." class="gf-form-control" style="max-width: 350px;">
+      <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-search"></i> Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="gf-card">
+  <div class="gf-card-body p-0">
+    <table class="gf-table">
+      <thead>
+        <tr>
+          <th>Player</th>
+          <th>Level</th>
+          <th>Playtime</th>
+          <th>Wallet</th>
+          <th>Country</th>
+          <th>Status</th>
+          <th>Joined</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in players %}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle bg-primary bg-opacity-25 text-primary fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                {{ p.username|slice:":1"|upper }}
+              </div>
+              <div>
+                <a href="{% url 'players:detail' p.pk %}" class="text-white text-decoration-none fw-semibold">{{ p.username }}</a>
+                <div class="text-muted" style="font-size: 0.72rem;">{{ p.email }}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge gf-badge-purple">Lvl {{ p.level }}</span></td>
+          <td class="text-secondary small">{{ p.total_playtime_hours }} hrs</td>
+          <td class="text-success small fw-bold">${{ p.wallet_balance|floatformat:2 }}</td>
+          <td><span class="badge bg-secondary">{{ p.country_code }}</span></td>
+          <td>
+            {% if p.is_banned %}
+              <span class="badge gf-badge-danger">Banned</span>
+            {% else %}
+              <span class="badge gf-badge-success">Active</span>
+            {% endif %}
+          </td>
+          <td class="text-secondary small">{{ p.created_at|date:"M d, Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center py-4 text-muted">No players found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include 'components/pagination.html' %}
+{% endblock %}

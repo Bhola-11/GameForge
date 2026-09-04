@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Release Setup - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Plan & Configure Game Release</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Target Version</label>
+              {{ form.version }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Verified Build</label>
+              {{ form.build }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Release Code (e.g. REL-2026-001)</label>
+              {{ form.release_code }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Release Title</label>
+              {{ form.title }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Target Distribution Platforms</label>
+              {{ form.target_platform }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Release Status</label>
+              {{ form.status }}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Scheduled Date & Time</label>
+              {{ form.scheduled_date }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Customer Release Notes & Feature Highlights</label>
+            {{ form.release_notes }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Release Plan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

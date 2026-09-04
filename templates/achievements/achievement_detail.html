@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}{{ achievement.name }} - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <h2 class="fw-bold text-white mb-0">{{ achievement.name }}</h2>
+      <span class="badge gf-badge-purple">{{ achievement.get_tier_display }}</span>
+    </div>
+    <div class="text-secondary small">
+      Game: <strong>{{ achievement.game.title }}</strong> &bull; Code: <code>{{ achievement.code }}</code>
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'achievements:list' %}" class="gf-btn gf-btn-secondary"><i class="bi bi-arrow-left"></i> All Achievements</a>
+    <a href="{% url 'achievements:edit' achievement.pk %}" class="gf-btn gf-btn-secondary"><i class="bi bi-pencil"></i> Edit</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-info-circle me-2 text-primary"></i> Unlock Criteria</h5>
+      </div>
+      <div class="gf-card-body">
+        <p class="text-secondary mb-4">{{ achievement.description }}</p>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="p-3 rounded bg-surface-elevated border border-secondary border-opacity-10">
+              <div class="text-muted small">Gamer Points</div>
+              <div class="fw-semibold text-warning">+{{ achievement.points }} Points</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 rounded bg-surface-elevated border border-secondary border-opacity-10">
+              <div class="text-muted small">Hidden Unlock</div>
+              <div class="fw-semibold text-white">{{ achievement.is_hidden|yesno:"Yes,No" }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

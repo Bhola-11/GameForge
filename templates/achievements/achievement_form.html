@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Achievement Setup - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Configure Achievement / Trophy</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Unique Code (e.g. ACH_KILL_DRAGON)</label>
+              {{ form.code }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Achievement Title</label>
+            {{ form.name }}
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Trophy Tier</label>
+              {{ form.tier }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Gamer Points</label>
+              {{ form.points }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Bootstrap Icon Name</label>
+              {{ form.icon_name }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Description / Unlock Requirement</label>
+            {{ form.description }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Achievement</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

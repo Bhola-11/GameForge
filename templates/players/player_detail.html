@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}{{ player.username }} - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <h2 class="fw-bold text-white mb-0">{{ player.username }}</h2>
+      <span class="badge gf-badge-purple">Level {{ player.level }}</span>
+      {% if player.is_banned %}<span class="badge gf-badge-danger">Banned</span>{% endif %}
+    </div>
+    <div class="text-secondary small">
+      UUID: <code>{{ player.player_id }}</code> &bull; Country: {{ player.country_code }}
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'players:list' %}" class="gf-btn gf-btn-secondary"><i class="bi bi-arrow-left"></i> Players</a>
+    <a href="{% url 'players:edit' player.pk %}" class="gf-btn gf-btn-secondary"><i class="bi bi-pencil"></i> Moderate</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-4">
+    <div class="gf-card text-center p-4 mb-4">
+      <div class="rounded-circle bg-primary bg-opacity-25 text-primary fw-bold d-inline-flex align-items-center justify-content-center fs-1 mb-3" style="width: 80px; height: 80px;">
+        {{ player.username|slice:":1"|upper }}
+      </div>
+      <h4 class="text-white fw-bold mb-1">{{ player.username }}</h4>
+      <p class="text-secondary small mb-3">{{ player.email }}</p>
+      
+      <div class="border-top border-secondary border-opacity-25 pt-3 text-start small">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Total Playtime</span>
+          <span class="text-white fw-bold">{{ player.total_playtime_hours }} hrs</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted">Experience XP</span>
+          <span class="text-white fw-bold">{{ player.xp|intcomma }} XP</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <span class="text-muted">Virtual Wallet</span>
+          <span class="text-success fw-bold">${{ player.wallet_balance }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <div class="gf-card mb-4">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-trophy-fill me-2 text-warning"></i> Unlocked Achievements</h5>
+      </div>
+      <div class="gf-card-body p-0">
+        <table class="gf-table">
+          <thead>
+            <tr>
+              <th>Achievement</th>
+              <th>Game</th>
+              <th>Points</th>
+              <th>Unlocked</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pa in achievements %}
+            <tr>
+              <td class="text-white fw-semibold">{{ pa.achievement.name }}</td>
+              <td><span class="badge gf-badge-purple">{{ pa.achievement.game.title }}</span></td>
+              <td><span class="text-warning small fw-bold">+{{ pa.achievement.points }} pts</span></td>
+              <td class="text-secondary small">{{ pa.unlocked_at|date:"M d, Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center py-3 text-muted">No achievements unlocked yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
