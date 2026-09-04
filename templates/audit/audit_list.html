@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Audit Trail - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">System Activity Stream & Audit Logs</h2>
+    <p class="text-secondary mb-0">Immutable compliance logs, authentication records, build triggers, and data mutations.</p>
+  </div>
+</div>
+
+<div class="gf-card mb-4">
+  <div class="gf-card-body p-3">
+    <form method="get" class="d-flex gap-2 flex-wrap">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search audit logs..." class="gf-form-control" style="max-width: 320px;">
+      <select name="module" class="gf-form-select" style="max-width: 200px;">
+        <option value="">All Modules</option>
+        <option value="accounts">Accounts / Auth</option>
+        <option value="games">Games Catalog</option>
+        <option value="projects">Projects</option>
+        <option value="tasks">Tasks & Sprints</option>
+        <option value="bugs">Defects & Bugs</option>
+        <option value="builds">Build Pipelines</option>
+        <option value="releases">Releases</option>
+        <option value="store">Storefront</option>
+      </select>
+      <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-search"></i> Filter</button>
+    </form>
+  </div>
+</div>
+
+<div class="gf-card">
+  <div class="gf-card-body p-0">
+    <table class="gf-table">
+      <thead>
+        <tr>
+          <th>Timestamp</th>
+          <th>User</th>
+          <th>Action</th>
+          <th>Module</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr>
+          <td class="text-secondary small font-monospace">{{ log.timestamp|date:"Y-m-d H:i:s" }}</td>
+          <td>
+            <div class="fw-semibold text-white">{{ log.user.username|default:"System" }}</div>
+          </td>
+          <td><span class="badge gf-badge-purple">{{ log.action }}</span></td>
+          <td><span class="text-muted small">{{ log.module }}</span></td>
+          <td class="text-white small">{{ log.description }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center py-4 text-muted">No audit records found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include 'components/pagination.html' %}
+{% endblock %}

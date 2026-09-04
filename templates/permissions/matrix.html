@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}RBAC Permissions Matrix - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Enterprise Role-Based Access Control (RBAC)</h2>
+    <p class="text-secondary mb-0">Granular authorization gates for leads, engineers, artists, QA testers, and producers.</p>
+  </div>
+</div>
+
+<div class="gf-card">
+  <div class="gf-card-header">
+    <h5 class="fw-bold mb-0 text-white"><i class="bi bi-shield-lock-fill me-2 text-primary"></i> Module Authorization Matrix</h5>
+  </div>
+  <div class="gf-card-body p-0">
+    <div class="table-responsive">
+      <table class="gf-table text-center">
+        <thead>
+          <tr>
+            <th class="text-start">Studio Role</th>
+            {% for m in modules %}
+              <th>{{ m|title }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for role_code, role_name in roles %}
+          <tr>
+            <td class="text-start fw-bold text-white">{{ role_name }}</td>
+            {% for m in modules %}
+              <td>
+                {% if role_code == 'SUPER_ADMIN' or role_code == 'ORG_ADMIN' %}
+                  <span class="badge gf-badge-success" title="Full Access"><i class="bi bi-check-circle-fill"></i> Full</span>
+                {% elif role_code == 'LEAD_DEVELOPER' or role_code == 'PROJECT_MANAGER' %}
+                  <span class="badge gf-badge-primary" title="Create & Edit"><i class="bi bi-pencil-fill"></i> Read/Write</span>
+                {% elif role_code == 'QA_TESTER' and m == 'bugs' %}
+                  <span class="badge gf-badge-success" title="Full Bug Access"><i class="bi bi-check-circle-fill"></i> Full</span>
+                {% elif role_code == 'VIEWER' %}
+                  <span class="badge gf-badge-neutral" title="Read Only"><i class="bi bi-eye"></i> View</span>
+                {% else %}
+                  <span class="badge gf-badge-neutral" title="Standard"><i class="bi bi-check"></i> Standard</span>
+                {% endif %}
+              </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
