@@ -1,0 +1,103 @@
+<aside class="sidebar">
+  <a href="{% url 'accounts:dashboard' %}" class="sidebar-brand">
+    <div class="logo-badge"><i class="bi bi-controller"></i></div>
+    <span>GameForge</span>
+  </a>
+
+  <div class="sidebar-nav">
+    <a href="{% url 'accounts:dashboard' %}" class="nav-link {% if request.resolver_match.app_name == 'accounts' and request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+      <i class="bi bi-grid-1x2-fill"></i>
+      <span>Dashboard</span>
+    </a>
+
+    <div class="nav-section-title">Organization & Teams</div>
+    <a href="{% url 'organizations:list' %}" class="nav-link {% if request.resolver_match.app_name == 'organizations' %}active{% endif %}">
+      <i class="bi bi-buildings"></i>
+      <span>Organizations</span>
+    </a>
+    <a href="{% url 'teams:list' %}" class="nav-link {% if request.resolver_match.app_name == 'teams' %}active{% endif %}">
+      <i class="bi bi-people-fill"></i>
+      <span>Teams & Talent</span>
+    </a>
+
+    <div class="nav-section-title">Game Development</div>
+    <a href="{% url 'games:list' %}" class="nav-link {% if request.resolver_match.app_name == 'games' %}active{% endif %}">
+      <i class="bi bi-joystick"></i>
+      <span>Games Catalog</span>
+    </a>
+    <a href="{% url 'projects:list' %}" class="nav-link {% if request.resolver_match.app_name == 'projects' %}active{% endif %}">
+      <i class="bi bi-kanban"></i>
+      <span>Projects</span>
+    </a>
+    <a href="{% url 'tasks:board' %}" class="nav-link {% if request.resolver_match.app_name == 'tasks' %}active{% endif %}">
+      <i class="bi bi-check2-square"></i>
+      <span>Tasks & Sprints</span>
+    </a>
+    <a href="{% url 'bugs:list' %}" class="nav-link {% if request.resolver_match.app_name == 'bugs' %}active{% endif %}">
+      <i class="bi bi-bug-fill"></i>
+      <span>Bug Tracker</span>
+    </a>
+    <a href="{% url 'assets:list' %}" class="nav-link {% if request.resolver_match.app_name == 'assets' %}active{% endif %}">
+      <i class="bi bi-box-seam-fill"></i>
+      <span>Asset Library</span>
+    </a>
+    <a href="{% url 'builds:list' %}" class="nav-link {% if request.resolver_match.app_name == 'builds' %}active{% endif %}">
+      <i class="bi bi-cpu-fill"></i>
+      <span>Build Pipeline</span>
+    </a>
+
+    <div class="nav-section-title">Release & Publishing</div>
+    <a href="{% url 'versions:list' %}" class="nav-link {% if request.resolver_match.app_name == 'versions' %}active{% endif %}">
+      <i class="bi bi-tag-fill"></i>
+      <span>Versions</span>
+    </a>
+    <a href="{% url 'releases:list' %}" class="nav-link {% if request.resolver_match.app_name == 'releases' %}active{% endif %}">
+      <i class="bi bi-rocket-takeoff-fill"></i>
+      <span>Releases & Deploy</span>
+    </a>
+    <a href="{% url 'store:list' %}" class="nav-link {% if request.resolver_match.app_name == 'store' %}active{% endif %}">
+      <i class="bi bi-shop"></i>
+      <span>Store Listings</span>
+    </a>
+
+    <div class="nav-section-title">LiveOps & Community</div>
+    <a href="{% url 'players:list' %}" class="nav-link {% if request.resolver_match.app_name == 'players' %}active{% endif %}">
+      <i class="bi bi-person-badge-fill"></i>
+      <span>Players</span>
+    </a>
+    <a href="{% url 'achievements:list' %}" class="nav-link {% if request.resolver_match.app_name == 'achievements' %}active{% endif %}">
+      <i class="bi bi-trophy-fill"></i>
+      <span>Achievements</span>
+    </a>
+    <a href="{% url 'leaderboards:list' %}" class="nav-link {% if request.resolver_match.app_name == 'leaderboards' %}active{% endif %}">
+      <i class="bi bi-bar-chart-steps"></i>
+      <span>Leaderboards</span>
+    </a>
+    <a href="{% url 'analytics:overview' %}" class="nav-link {% if request.resolver_match.app_name == 'analytics' %}active{% endif %}">
+      <i class="bi bi-graph-up-arrow"></i>
+      <span>Analytics</span>
+    </a>
+    <a href="{% url 'monetization:dashboard' %}" class="nav-link {% if request.resolver_match.app_name == 'monetization' %}active{% endif %}">
+      <i class="bi bi-cash-stack"></i>
+      <span>Monetization</span>
+    </a>
+
+    <div class="nav-section-title">Operations & Admin</div>
+    <a href="{% url 'support:list' %}" class="nav-link {% if request.resolver_match.app_name == 'support' %}active{% endif %}">
+      <i class="bi bi-headset"></i>
+      <span>Support Desk</span>
+    </a>
+    <a href="{% url 'reports:list' %}" class="nav-link {% if request.resolver_match.app_name == 'reports' %}active{% endif %}">
+      <i class="bi bi-file-earmark-bar-graph"></i>
+      <span>Reports</span>
+    </a>
+    <a href="{% url 'permissions:matrix' %}" class="nav-link {% if request.resolver_match.app_name == 'permissions' %}active{% endif %}">
+      <i class="bi bi-shield-lock-fill"></i>
+      <span>Permissions (RBAC)</span>
+    </a>
+    <a href="{% url 'audit:list' %}" class="nav-link {% if request.resolver_match.app_name == 'audit' %}active{% endif %}">
+      <i class="bi bi-journal-text"></i>
+      <span>Audit Logs</span>
+    </a>
+  </div>
+</aside>

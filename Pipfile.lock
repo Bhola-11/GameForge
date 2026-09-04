@@ -1,0 +1,55 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "4b2e5358054ff8e7ef9e685f4b50cfa82cf91f1a5477c77f0a9b6e82845c4fa9"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.11"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "asgiref": {
+            "hashes": [
+                "sha256:cb2280630b42f638148b56f8f533ebf90b9b3cc03e2c65a4fa3c21a086b97ee6"
+            ],
+            "version": "==3.8.1"
+        },
+        "django": {
+            "hashes": [
+                "sha256:7bc537bc2c0029b3cb6f4c7d03a1fc6c527e089279dc413bbce2189d5f7f3299"
+            ],
+            "index": "pypi",
+            "version": "==5.0.6"
+        },
+        "pillow": {
+            "hashes": [
+                "sha256:a6b6c23c137452d2b512bb6495a62d64bc8c919d7d4982a0b12ad7f1396a9cf5"
+            ],
+            "index": "pypi",
+            "version": "==10.3.0"
+        },
+        "sqlparse": {
+            "hashes": [
+                "sha256:820806613e74d6a3bf31fa23f859f7382d5bae596b6146f34f1d4411f0183e36"
+            ],
+            "index": "pypi",
+            "version": "==0.5.0"
+        }
+    },
+    "develop": {
+        "pytest": {
+            "hashes": [
+                "sha256:2f56193796d1eb82d1c9ef007b8a8b0e8c0b29a28e9cf2efb1cdde19c40bb5f9"
+            ],
+            "version": "==8.2.2"
+        }
+    }
+}
