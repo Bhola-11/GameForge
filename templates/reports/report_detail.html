@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}{{ report.title }} - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <h2 class="fw-bold text-white mb-0">{{ report.title }}</h2>
+      <span class="badge gf-badge-purple">{{ report.get_report_type_display }}</span>
+    </div>
+    <div class="text-secondary small">
+      Generated automatically &bull; Real-time Database Snapshot
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <button onclick="window.print();" class="gf-btn gf-btn-secondary"><i class="bi bi-printer"></i> Print / Export PDF</button>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon blue"><i class="bi bi-joystick"></i></div>
+      <div>
+        <div class="kpi-value">{{ total_games }}</div>
+        <div class="kpi-label">Active Game IPs</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon purple"><i class="bi bi-kanban"></i></div>
+      <div>
+        <div class="kpi-value">{{ total_projects }}</div>
+        <div class="kpi-label">Production Projects</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon green"><i class="bi bi-check2-circle"></i></div>
+      <div>
+        <div class="kpi-value">{{ completed_tasks }} / {{ total_tasks }}</div>
+        <div class="kpi-label">Tasks Completed</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon green"><i class="bi bi-currency-dollar"></i></div>
+      <div>
+        <div class="kpi-value">${{ total_revenue|floatformat:0|intcomma }}</div>
+        <div class="kpi-label">Gross Revenue</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="gf-card mb-4">
+  <div class="gf-card-header">
+    <h5 class="fw-bold mb-0 text-white"><i class="bi bi-table me-2 text-primary"></i> Studio Operational KPI Matrix</h5>
+  </div>
+  <div class="gf-card-body p-0">
+    <table class="gf-table">
+      <thead>
+        <tr>
+          <th>Metric Domain</th>
+          <th>Total Count</th>
+          <th>Health Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fw-bold text-white">Quality Assurance & Bug Velocity</td>
+          <td>{{ resolved_bugs }} Resolved / {{ total_bugs }} Total Defects</td>
+          <td><span class="badge gf-badge-success">Nominal</span></td>
+        </tr>
+        <tr>
+          <td class="fw-bold text-white">CI/CD Build Health</td>
+          <td>{{ total_builds }} Binaries Cooked</td>
+          <td><span class="badge gf-badge-success">Passing</span></td>
+        </tr>
+        <tr>
+          <td class="fw-bold text-white">Sprint Execution</td>
+          <td>{{ completed_tasks }} Completed Tasks</td>
+          <td><span class="badge gf-badge-primary">On Schedule</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
