@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Projects Directory - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Game Engineering Projects</h2>
+    <p class="text-secondary mb-0">Milestone initiatives, gameplay feature branches, level builds, and art pipelines.</p>
+  </div>
+  <a href="{% url 'projects:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-plus-lg"></i> New Project</a>
+</div>
+
+<div class="gf-card mb-4">
+  <div class="gf-card-body p-3">
+    <form method="get" class="d-flex gap-2 flex-wrap">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search projects, games..." class="gf-form-control" style="max-width: 320px;">
+      <select name="status" class="gf-form-select" style="max-width: 200px;">
+        <option value="">All Statuses</option>
+        <option value="PLANNING">Planning</option>
+        <option value="IN_PROGRESS">In Progress</option>
+        <option value="ON_HOLD">On Hold</option>
+        <option value="COMPLETED">Completed</option>
+      </select>
+      <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-search"></i> Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% for p in projects %}
+  <div class="col-md-6 col-xl-4">
+    <div class="gf-card h-100 d-flex flex-column">
+      <div class="gf-card-body">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+          <span class="badge gf-badge-purple">{{ p.game.title }}</span>
+          <span class="gf-badge {% if p.status == 'COMPLETED' %}gf-badge-success{% elif p.status == 'IN_PROGRESS' %}gf-badge-primary{% else %}gf-badge-warning{% endif %}">
+            {{ p.get_status_display }}
+          </span>
+        </div>
+        <h4 class="fw-bold text-white mb-1"><a href="{% url 'projects:detail' p.pk %}" class="text-white text-decoration-none">{{ p.title }}</a></h4>
+        <div class="text-muted small mb-3">Lead: {{ p.lead.display_name|default:"Unassigned" }}</div>
+        
+        <div class="mb-3">
+          <div class="d-flex justify-content-between text-secondary small mb-1">
+            <span>Progress</span>
+            <span class="fw-bold text-white">{{ p.progress_percentage }}%</span>
+          </div>
+          <div class="progress" style="height: 6px;">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ p.progress_percentage }}%;"></div>
+          </div>
+        </div>
+
+        <div class="border-top border-secondary border-opacity-25 pt-3 mt-auto d-flex justify-content-between align-items-center">
+          <span class="text-secondary small"><i class="bi bi-check2-square me-1"></i> {{ p.tasks.count }} Tasks</span>
+          <a href="{% url 'projects:detail' p.pk %}" class="gf-btn gf-btn-secondary py-1 px-3">Project Hub</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center py-5 text-muted">
+    <i class="bi bi-kanban fs-1 mb-2 d-block"></i>
+    No projects found. Click "New Project" to create one.
+  </div>
+  {% endfor %}
+</div>
+{% include 'components/pagination.html' %}
+{% endblock %}

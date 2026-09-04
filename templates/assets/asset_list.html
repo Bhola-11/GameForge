@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Asset Library - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Studio Digital Asset Vault</h2>
+    <p class="text-secondary mb-0">3D meshes, PBR texture maps, orchestral scores, sound fx, shaders, and UI packs.</p>
+  </div>
+  <a href="{% url 'assets:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-upload"></i> Upload Asset</a>
+</div>
+
+<div class="gf-card mb-4">
+  <div class="gf-card-body p-3">
+    <form method="get" class="d-flex gap-2 flex-wrap">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search assets..." class="gf-form-control" style="max-width: 320px;">
+      <select name="category" class="gf-form-select" style="max-width: 220px;">
+        <option value="">All Categories</option>
+        <option value="3D_MODEL">3D Models</option>
+        <option value="TEXTURE">Textures / PBR</option>
+        <option value="AUDIO">Audio & SFX</option>
+        <option value="MUSIC">Music</option>
+        <option value="UI">UI Elements</option>
+        <option value="VFX">VFX & Shaders</option>
+      </select>
+      <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-search"></i> Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% for a in assets %}
+  <div class="col-sm-6 col-lg-4 col-xl-3">
+    <div class="gf-card h-100 d-flex flex-column">
+      <div class="gf-card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="badge gf-badge-purple">{{ a.get_category_display }}</span>
+          <span class="text-muted small">{{ a.format_extension }}</span>
+        </div>
+        <h5 class="fw-bold text-white mb-1"><a href="{% url 'assets:detail' a.pk %}" class="text-white text-decoration-none">{{ a.title }}</a></h5>
+        <div class="text-secondary small mb-3">{{ a.game.title }} &bull; {{ a.version }}</div>
+        
+        <div class="text-muted small mb-3">
+          {% if a.poly_count %}<i class="bi bi-box me-1"></i> {{ a.poly_count }} polys{% endif %}
+          {% if a.resolution %}<i class="bi bi-aspect-ratio me-1"></i> {{ a.resolution }}{% endif %}
+          {% if a.audio_duration_sec %}<i class="bi bi-music-note me-1"></i> {{ a.audio_duration_sec }}s{% endif %}
+        </div>
+
+        <div class="border-top border-secondary border-opacity-25 pt-2 mt-auto d-flex justify-content-between align-items-center">
+          <span class="text-secondary small">{{ a.file_size_mb }} MB</span>
+          <a href="{% url 'assets:detail' a.pk %}" class="gf-btn gf-btn-secondary py-1 px-2">Inspect</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center py-5 text-muted">
+    <i class="bi bi-box-seam fs-1 mb-2 d-block"></i>
+    No assets found in vault. Click "Upload Asset" to add files.
+  </div>
+  {% endfor %}
+</div>
+{% include 'components/pagination.html' %}
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Defect Filing - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white"><i class="bi bi-bug me-2 text-danger"></i> File Defect / QA Ticket</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sub-Project (Optional)</label>
+              {{ form.project }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Defect Summary / Title</label>
+            {{ form.title }}
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Build Version Found</label>
+              {{ form.version_found }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Platform</label>
+              {{ form.platform }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Severity</label>
+              {{ form.severity }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Priority</label>
+              {{ form.priority }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Assign To Developer</label>
+              {{ form.assigned_to }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Steps to Reproduce</label>
+            {{ form.steps_to_reproduce }}
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Expected Behavior</label>
+              {{ form.expected_result }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Actual Result / Glitch</label>
+              {{ form.actual_result }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Logs & Callstack Dump</label>
+            {{ form.logs_or_stacktrace }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-danger"><i class="bi bi-check2"></i> Submit Bug Report</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
