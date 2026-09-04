@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Achievements & Trophies - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Trophies & Achievement Systems</h2>
+    <p class="text-secondary mb-0">Configure gamer points, secret unlock conditions, platinum trophies & rewards.</p>
+  </div>
+  <a href="{% url 'achievements:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-trophy"></i> Create Achievement</a>
+</div>
+
+<div class="gf-card mb-4">
+  <div class="gf-card-body p-3">
+    <form method="get" class="d-flex gap-2 flex-wrap">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search achievements..." class="gf-form-control" style="max-width: 320px;">
+      <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-search"></i> Search</button>
+    </form>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% for ach in achievements %}
+  <div class="col-md-6 col-xl-4">
+    <div class="gf-card h-100 d-flex flex-column">
+      <div class="gf-card-body">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="rounded-3 bg-warning bg-opacity-20 text-warning p-3 d-flex align-items-center justify-content-center" style="width: 52px; height: 52px;">
+            <i class="bi bi-{{ ach.icon_name }} fs-3"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-white mb-0"><a href="{% url 'achievements:detail' ach.pk %}" class="text-white text-decoration-none">{{ ach.name }}</a></h5>
+            <span class="badge gf-badge-purple">{{ ach.game.title }}</span>
+          </div>
+        </div>
+        <p class="text-secondary small mb-3">{{ ach.description }}</p>
+        
+        <div class="border-top border-secondary border-opacity-25 pt-3 mt-auto d-flex justify-content-between align-items-center">
+          <span class="text-warning small fw-bold"><i class="bi bi-star-fill me-1"></i> +{{ ach.points }} Points</span>
+          <span class="badge bg-secondary">{{ ach.get_tier_display }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center py-5 text-muted">
+    <i class="bi bi-trophy fs-1 mb-2 d-block"></i>
+    No achievements registered.
+  </div>
+  {% endfor %}
+</div>
+{% include 'components/pagination.html' %}
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Store Listing Configuration - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Configure Store Listing</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Storefront Target</label>
+              {{ form.store }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Headline Pitch</label>
+            {{ form.headline }}
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Retail Price ($ USD)</label>
+              {{ form.price }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Discount %</label>
+              {{ form.discount_percentage }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Status</label>
+              {{ form.status }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Short Description (Above the fold)</label>
+            {{ form.short_description }}
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Full Store Description</label>
+            {{ form.full_description }}
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Minimum CPU</label>
+              {{ form.min_cpu }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Minimum GPU</label>
+              {{ form.min_gpu }}
+            </div>
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Store Listing</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

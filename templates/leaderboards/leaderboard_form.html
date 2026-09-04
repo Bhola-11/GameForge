@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Leaderboard Configuration - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Configure Competitive Leaderboard</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Leaderboard Name</label>
+              {{ form.name }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Score Metric Type</label>
+              {{ form.metric_type }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Sorting Direction</label>
+              {{ form.sort_order }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Season Name (e.g. Season 2: Retribution)</label>
+            {{ form.season_name }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Leaderboard</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

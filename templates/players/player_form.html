@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}Player Moderation - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Edit Player Profile & Moderation</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Player Handle</label>
+              {{ form.username }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Email</label>
+              {{ form.email }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Level</label>
+              {{ form.level }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">XP</label>
+              {{ form.xp }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Country Code</label>
+              {{ form.country_code }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Wallet Balance ($ USD)</label>
+            {{ form.wallet_balance }}
+          </div>
+          <div class="form-check form-switch mb-3">
+            {{ form.is_banned }}
+            <label class="form-check-label text-white ms-2">Account Banned from Multiplayer & Matchmaking</label>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Ban Reason / Moderation Note</label>
+            {{ form.ban_reason }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Player Data</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
