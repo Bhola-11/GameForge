@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Studio Members Directory - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Studio Staff Directory</h2>
+    <p class="text-secondary mb-0">Engineers, designers, QA specialists, producers, and leadership.</p>
+  </div>
+</div>
+
+<div class="gf-card">
+  <div class="gf-card-header">
+    <form method="get" class="d-flex gap-2 flex-wrap w-100">
+      <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search by name, username or email..." class="gf-form-control" style="max-width: 320px;">
+      <select name="role" class="gf-form-select" style="max-width: 200px;">
+        <option value="">All Roles</option>
+        <option value="SUPER_ADMIN">Super Admin</option>
+        <option value="ORG_ADMIN">Org Admin</option>
+        <option value="PROJECT_MANAGER">Project Manager</option>
+        <option value="LEAD_DEVELOPER">Lead Developer</option>
+        <option value="DEVELOPER">Developer</option>
+        <option value="DESIGNER">Designer</option>
+        <option value="QA_TESTER">QA Tester</option>
+      </select>
+      <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-search"></i> Filter</button>
+    </form>
+  </div>
+  <div class="gf-card-body p-0">
+    <table class="gf-table">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th>Job Title</th>
+          <th>Contact</th>
+          <th>Joined</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <div class="rounded-circle bg-primary bg-opacity-25 text-primary fw-bold d-flex align-items-center justify-content-center" style="width: 34px; height: 34px;">
+                {{ u.username|slice:":1"|upper }}
+              </div>
+              <div>
+                <a href="{% url 'accounts:user_detail' u.pk %}" class="text-white text-decoration-none fw-semibold">{{ u.get_full_name|default:u.username }}</a>
+                <div class="text-muted" style="font-size: 0.75rem;">@{{ u.username }}</div>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge gf-badge-purple">{{ u.get_role_display }}</span></td>
+          <td>{{ u.department|default:"-" }}</td>
+          <td>{{ u.job_title|default:"-" }}</td>
+          <td class="text-secondary small">{{ u.email }}</td>
+          <td class="text-secondary small">{{ u.date_joined|date:"M d, Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center py-4 text-muted">No studio members found matching criteria.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include 'components/pagination.html' %}
+{% endblock %}
