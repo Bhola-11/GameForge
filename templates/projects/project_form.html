@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Project Setup - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Configure Development Project</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Studio / Organization</label>
+              {{ form.organization }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Associated Game Title</label>
+              {{ form.game }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Project Title</label>
+            {{ form.title }}
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Project Lead / Producer</label>
+              {{ form.lead }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Status</label>
+              {{ form.status }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Priority</label>
+              {{ form.priority }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Start Date</label>
+              {{ form.start_date }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Target End Date</label>
+              {{ form.end_date }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Progress Percentage (0-100)</label>
+              {{ form.progress_percentage }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Budget Allocation ($ USD)</label>
+            {{ form.budget }}
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Project Goals & Technical Spec</label>
+            {{ form.description }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Project</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

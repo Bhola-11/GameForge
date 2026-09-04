@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Build Configuration - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Register / Configure Pipeline Build</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Associated Version</label>
+              {{ form.version }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Build Number</label>
+              {{ form.build_number }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Target Platform</label>
+              {{ form.platform }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Build Status</label>
+              {{ form.status }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Branch Name</label>
+              {{ form.branch_name }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Commit Hash</label>
+              {{ form.git_commit_hash }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Artifact Size (MB)</label>
+              {{ form.file_size_mb }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Build Duration (Seconds)</label>
+              {{ form.build_duration_sec }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">QA Notes & Verification Checklist</label>
+            {{ form.qa_notes }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Build Record</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

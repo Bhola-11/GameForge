@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}{{ project.title }} - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <div class="d-flex align-items-center gap-2 mb-1">
+      <h2 class="fw-bold text-white mb-0">{{ project.title }}</h2>
+      <span class="badge gf-badge-purple">{{ project.get_status_display }}</span>
+    </div>
+    <div class="text-secondary small">
+      Game: <strong>{{ project.game.title }}</strong> &bull; Lead: {{ project.lead.display_name|default:"Unassigned" }}
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'tasks:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-plus-lg"></i> Add Task</a>
+    <a href="{% url 'projects:edit' project.pk %}" class="gf-btn gf-btn-secondary"><i class="bi bi-pencil"></i> Edit</a>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="gf-card mb-4">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-list-check me-2 text-primary"></i> Project Tasks</h5>
+        <a href="{% url 'tasks:board' %}" class="btn btn-sm btn-outline-primary">Open Board</a>
+      </div>
+      <div class="gf-card-body p-0">
+        <table class="gf-table">
+          <thead>
+            <tr>
+              <th>Task</th>
+              <th>Assignee</th>
+              <th>Status</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in tasks %}
+            <tr>
+              <td><a href="{% url 'tasks:detail' t.pk %}" class="text-white text-decoration-none fw-semibold">{{ t.title }}</a></td>
+              <td>{{ t.assigned_to.display_name|default:"Unassigned" }}</td>
+              <td><span class="badge bg-secondary">{{ t.get_status_display }}</span></td>
+              <td><span class="badge gf-badge-warning">{{ t.get_priority_display }}</span></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center py-3 text-muted">No tasks logged in this project yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="gf-card mb-4">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i> Risk Register</h5>
+      </div>
+      <div class="gf-card-body">
+        {% for r in risks %}
+        <div class="p-3 mb-2 rounded bg-surface-elevated border border-secondary border-opacity-10">
+          <div class="fw-semibold text-white small mb-1">{{ r.description }}</div>
+          <div class="d-flex justify-content-between text-muted" style="font-size: 0.72rem;">
+            <span>Impact: {{ r.get_impact_display }}</span>
+            <span>Prob: {{ r.get_probability_display }}</span>
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-muted small">No risks recorded for this project.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Sprint Kanban Board - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Production Sprint Board</h2>
+    <p class="text-secondary mb-0">Track gameplay engineering, animation, audio, and asset workflow states.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'tasks:list' %}" class="gf-btn gf-btn-secondary"><i class="bi bi-list-ul"></i> Table View</a>
+    <a href="{% url 'tasks:create' %}" class="gf-btn gf-btn-primary"><i class="bi bi-plus-lg"></i> Create Task</a>
+  </div>
+</div>
+
+<div class="kanban-board">
+  <!-- TO DO -->
+  <div class="kanban-column">
+    <div class="kanban-header">
+      <span class="text-white"><i class="bi bi-circle me-1 text-secondary"></i> To Do</span>
+      <span class="badge bg-secondary">{{ todo_tasks.count }}</span>
+    </div>
+    <div class="kanban-cards">
+      {% for t in todo_tasks %}
+        {% include 'tasks/_task_card.html' with task=t %}
+      {% empty %}
+        <div class="text-center py-4 text-muted small">No tasks in queue</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- IN PROGRESS -->
+  <div class="kanban-column">
+    <div class="kanban-header">
+      <span class="text-white"><i class="bi bi-play-circle me-1 text-primary"></i> In Progress</span>
+      <span class="badge bg-primary">{{ in_progress_tasks.count }}</span>
+    </div>
+    <div class="kanban-cards">
+      {% for t in in_progress_tasks %}
+        {% include 'tasks/_task_card.html' with task=t %}
+      {% empty %}
+        <div class="text-center py-4 text-muted small">No tasks active</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- CODE / ART REVIEW -->
+  <div class="kanban-column">
+    <div class="kanban-header">
+      <span class="text-white"><i class="bi bi-eye me-1 text-warning"></i> In Review</span>
+      <span class="badge bg-warning text-dark">{{ review_tasks.count }}</span>
+    </div>
+    <div class="kanban-cards">
+      {% for t in review_tasks %}
+        {% include 'tasks/_task_card.html' with task=t %}
+      {% empty %}
+        <div class="text-center py-4 text-muted small">No tasks awaiting review</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- QA TESTING -->
+  <div class="kanban-column">
+    <div class="kanban-header">
+      <span class="text-white"><i class="bi bi-shield-check me-1 text-info"></i> QA Testing</span>
+      <span class="badge bg-info text-dark">{{ testing_tasks.count }}</span>
+    </div>
+    <div class="kanban-cards">
+      {% for t in testing_tasks %}
+        {% include 'tasks/_task_card.html' with task=t %}
+      {% empty %}
+        <div class="text-center py-4 text-muted small">No tasks in test</div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- COMPLETED -->
+  <div class="kanban-column">
+    <div class="kanban-header">
+      <span class="text-white"><i class="bi bi-check2-all me-1 text-success"></i> Completed</span>
+      <span class="badge bg-success">{{ completed_tasks.count }}</span>
+    </div>
+    <div class="kanban-cards">
+      {% for t in completed_tasks %}
+        {% include 'tasks/_task_card.html' with task=t %}
+      {% empty %}
+        <div class="text-center py-4 text-muted small">No completed tasks</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Game Setup - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Configure Game Title</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Studio / Organization</label>
+              {{ form.organization }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.title }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Genre</label>
+              {{ form.genre }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Game Engine</label>
+              {{ form.engine }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Lifecycle Status</label>
+              {{ form.status }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Target Platforms</label>
+              {{ form.platforms }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Target Release Date</label>
+              {{ form.target_release_date }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Budget ($ USD)</label>
+              {{ form.budget }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Source Git Repository URL</label>
+              {{ form.repository_url }}
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Short Summary Pitch</label>
+            {{ form.summary }}
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Full Game Design Document Overview</label>
+            {{ form.description }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save Game Title</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
