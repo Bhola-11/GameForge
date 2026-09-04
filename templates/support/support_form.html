@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Open Ticket - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Open Support Ticket</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Player Account</label>
+              {{ form.player }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Subject</label>
+              {{ form.subject }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Category</label>
+              {{ form.category }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Priority</label>
+              {{ form.priority }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Assigned Agent</label>
+              {{ form.assigned_agent }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Detailed Ticket Description</label>
+            {{ form.description }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Submit Ticket</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

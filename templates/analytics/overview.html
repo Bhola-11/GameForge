@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% block title %}LiveOps & Telemetry Analytics - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">LiveOps Telemetry & Game Analytics</h2>
+    <p class="text-secondary mb-0">Real-time player retention, DAU/MAU cohorts, average FPS performance, and session telemetry.</p>
+  </div>
+  <div class="d-flex gap-2">
+    <form method="get" class="d-flex gap-2">
+      <select name="game" class="gf-form-select" onchange="this.form.submit();">
+        {% for g in games %}
+          <option value="{{ g.id }}" {% if selected_game.id == g.id %}selected{% endif %}>{{ g.title }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon blue"><i class="bi bi-people-fill"></i></div>
+      <div>
+        <div class="kpi-value">48,250</div>
+        <div class="kpi-label">Peak Concurrent (CCU)</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon green"><i class="bi bi-graph-up-arrow"></i></div>
+      <div>
+        <div class="kpi-value">124,800</div>
+        <div class="kpi-label">Daily Active Users</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon purple"><i class="bi bi-speedometer2"></i></div>
+      <div>
+        <div class="kpi-value">59.8 FPS</div>
+        <div class="kpi-label">Avg Client Frame Rate</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="kpi-card">
+      <div class="kpi-icon amber"><i class="bi bi-shield-x"></i></div>
+      <div>
+        <div class="kpi-value">0.02%</div>
+        <div class="kpi-label">Crash Rate per Session</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="row g-4 mb-4">
+  <div class="col-lg-8">
+    <div class="gf-card h-100">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-activity me-2 text-primary"></i> Daily Active Users & Session Volume</h5>
+      </div>
+      <div class="gf-card-body">
+        <canvas id="dauChart" height="240"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="gf-card h-100">
+      <div class="gf-card-header">
+        <h5 class="fw-bold mb-0 text-white"><i class="bi bi-pie-chart-fill me-2 text-info"></i> Player Platform Split</h5>
+      </div>
+      <div class="gf-card-body d-flex flex-column align-items-center justify-content-center">
+        <canvas id="platformPieChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Telemetry Stream -->
+<div class="gf-card">
+  <div class="gf-card-header">
+    <h5 class="fw-bold mb-0 text-white"><i class="bi bi-broadcast me-2 text-success"></i> Ingested Telemetry Event Stream</h5>
+  </div>
+  <div class="gf-card-body p-0">
+    <table class="gf-table">
+      <thead>
+        <tr>
+          <th>Event Name</th>
+          <th>Player</th>
+          <th>Payload Data</th>
+          <th>Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ev in recent_events %}
+        <tr>
+          <td><span class="badge gf-badge-purple">{{ ev.event_name }}</span></td>
+          <td><a href="{% url 'players:detail' ev.player.pk %}" class="text-white text-decoration-none fw-semibold">{{ ev.player.username|default:"Anonymous" }}</a></td>
+          <td class="font-monospace small text-info">{{ ev.event_data_json|truncatechars:60 }}</td>
+          <td class="text-secondary small">{{ ev.timestamp|date:"M d, H:i:s" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center py-4 text-muted">No telemetry events recorded yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('dauChart');
+    if (ctx) {
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7', 'Day 8', 'Day 9', 'Day 10'],
+                datasets: [{
+                    label: 'Daily Active Users (DAU)',
+                    data: [42000, 48000, 52000, 61000, 75000, 92000, 115000, 124800, 118000, 131000],
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { labels: { color: '#94A3B8' } } },
+                scales: {
+                    x: { ticks: { color: '#94A3B8' }, grid: { color: '#222F46' } },
+                    y: { ticks: { color: '#94A3B8' }, grid: { color: '#222F46' } }
+                }
+            }
+        });
+    }
+
+    const pieCtx = document.getElementById('platformPieChart');
+    if (pieCtx) {
+        new Chart(pieCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Windows PC (Steam)', 'PlayStation 5', 'Xbox Series X', 'Nintendo Switch'],
+                datasets: [{
+                    data: [45, 28, 18, 9],
+                    backgroundColor: ['#3B82F6', '#6366F1', '#10B981', '#F59E0B']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { position: 'bottom', labels: { color: '#94A3B8', boxWidth: 12 } } }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

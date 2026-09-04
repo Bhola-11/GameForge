@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Virtual Item Configuration - GameForge{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="gf-card">
+      <div class="gf-card-header">
+        <h4 class="fw-bold mb-0 text-white">Create Virtual / DLC Item</h4>
+      </div>
+      <div class="gf-card-body">
+        <form method="post">
+          {% csrf_token %}
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label">Game Title</label>
+              {{ form.game }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Item Display Name</label>
+              {{ form.name }}
+            </div>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Item SKU</label>
+              {{ form.sku }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Item Category</label>
+              {{ form.item_type }}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Price ($ USD)</label>
+              {{ form.price }}
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">In-Game Description</label>
+            {{ form.description }}
+          </div>
+          <button type="submit" class="gf-btn gf-btn-primary"><i class="bi bi-save"></i> Save In-Game Item</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

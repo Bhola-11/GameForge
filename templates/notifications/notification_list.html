@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Notifications Center - GameForge{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+  <div>
+    <h2 class="fw-bold text-white mb-1">Notification Command Center</h2>
+    <p class="text-secondary mb-0">Task assignments, critical bug alerts, build failures, and approval pings.</p>
+  </div>
+  <a href="{% url 'notifications:read_all' %}" class="gf-btn gf-btn-secondary"><i class="bi bi-check2-all"></i> Mark All as Read</a>
+</div>
+
+<div class="gf-card">
+  <div class="gf-card-body p-0">
+    {% for n in notifications %}
+    <div class="p-3 border-bottom border-secondary border-opacity-10 d-flex justify-content-between align-items-center {% if not n.is_read %}bg-surface-elevated{% endif %}">
+      <div class="d-flex align-items-start gap-3">
+        <div class="rounded-circle bg-primary bg-opacity-20 text-primary p-2 mt-1">
+          <i class="bi bi-bell fs-5"></i>
+        </div>
+        <div>
+          <div class="fw-bold text-white mb-1">{{ n.title }}</div>
+          <p class="text-secondary small mb-1">{{ n.message }}</p>
+          <span class="text-muted" style="font-size: 0.72rem;">{{ n.created_at|timesince }} ago &bull; Type: {{ n.get_notification_type_display }}</span>
+        </div>
+      </div>
+      <div>
+        <a href="{% url 'notifications:read' n.pk %}" class="gf-btn gf-btn-secondary py-1 px-3">View</a>
+      </div>
+    </div>
+    {% empty %}
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-bell-slash fs-1 mb-2 d-block"></i>
+      No notifications in your inbox.
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
